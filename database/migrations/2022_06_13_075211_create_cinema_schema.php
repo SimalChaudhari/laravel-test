@@ -37,7 +37,36 @@ class CreateCinemaSchema extends Migration
      */
     public function up()
     {
-        throw new \Exception('implement in coding task 4, you can ignore this exception if you are just running the initial migrations.');
+        Schema::create('films', function($table) {
+            $table->increments('id');
+            $table->string('name');
+            $table->string('price');
+            $table->timestamps();
+        });
+
+        Schema::create('seats', function($table) {
+            $table->increments('id');
+            $table->integer('films_id')->unsigned();
+            $table->integer('user_id')->unsigned();
+            $table->foreign('films_id')->references('id')->on('films')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->string('total_seat');
+            $table->string('available_seat');
+            $table->dateTime('start');
+            $table->dateTime('end');
+            $table->timestamps();
+        });
+
+        Schema::create('seat_book', function($table) {
+            $table->increments('id');
+            $table->integer('films_id')->unsigned();
+            $table->integer('user_id')->unsigned();
+            $table->foreign('films_id')->references('id')->on('films')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->dateTime('booked_date');
+            $table->dateTime('end');
+            $table->timestamps();
+        });
     }
 
     /**
@@ -47,5 +76,6 @@ class CreateCinemaSchema extends Migration
      */
     public function down()
     {
+
     }
 }
